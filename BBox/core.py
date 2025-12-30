@@ -67,7 +67,9 @@ def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verb
 
         # Save processed image
         # this adds '_flipH' for example to the name in order to remember what has been done to the image and label
-        factor_str = "_".join(map(str, factor))
+
+        if isinstance(factor, list):
+            factor = "_".join(map(str, factor))
         addtofname = '_' + func_img.__name__ + f'{factor}'
         #now create a new fname 
         new_fname = os.path.splitext(fname)[0] + addtofname + os.path.splitext(fname)[1]
