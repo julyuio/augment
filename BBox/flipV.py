@@ -118,9 +118,11 @@ def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2):
 
 
 def flipV (root_dir, output_dir, debug=True, verbose=True):
-    print(f'>> Fliping along vertical : {root_dir}')
+    if verbose: 
+        print(f'>> Flipping along vertical : {root_dir}')
     process_dataset(root_dir, output_dir, flip_image_vertical, flip_yolo_boxes_vertical, debug, verbose)
-    print(f'>> flipV completed ')
+    if verbose: 
+        print(f'>> flipV completed ')
 
 
 # ---------------------------------------------------------

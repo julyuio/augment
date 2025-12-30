@@ -14,4 +14,4 @@ output_dir='trainAugmented' # results folder can also be the same name as datase
 
 
 flipH(datasetDir , output_dir)
-flipV(datasetDir , output_dir)
+flipV(datasetDir , output_dir, verbose=False)

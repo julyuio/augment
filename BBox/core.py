@@ -61,27 +61,30 @@ def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verb
                 xc, yc, bw, bh = map(float, parts[1:])
                 boxes.append([cls, xc, yc, bw, bh])
 
-        # Flip image + boxes
+        # process image + boxes
         processed_img = func_img(img)
         processed_boxes = func_label(boxes)
 
-        # Save flipped image
-        out_img_path = os.path.join(out_img_dir, fname)
+        # Save processed image
+        new_fname = os.path.splitext(fname)[0] + addtofname + os.path.splitext(fname)[1]
+        out_img_path = os.path.join(out_img_dir, new_fname )
         cv2.imwrite(out_img_path, processed_img)
 
-        # Save flipped labels
-        out_txt_path = os.path.join(out_lbl_dir, os.path.splitext(fname)[0] + ".txt")
+        # Save processed labels
+        out_txt_path = os.path.join(out_lbl_dir, os.path.splitext(new_fname)[0] + ".txt")
         with open(out_txt_path, "w") as f:
             for cls, xc, yc, bw, bh in processed_boxes:
                 f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
 
-        # Debug image with drawn boxes
-        debug_img = draw_boxes(processed_img, processed_boxes)
-        cv2.imwrite(os.path.join(debug_img_dir, fname), debug_img)
+        if debug:
+            # Debug image with drawn boxes
+            debug_img = draw_boxes(processed_img, processed_boxes)
+            cv2.imwrite(os.path.join(debug_img_dir, fname), debug_img)
 
-        # Copy labels to debug folder
-        with open(os.path.join(debug_lbl_dir, os.path.splitext(fname)[0] + ".txt"), "w") as f:
-            for cls, xc, yc, bw, bh in processed_boxes:
-                f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
+            # Copy labels to debug folder
+            with open(os.path.join(debug_lbl_dir, os.path.splitext(fname)[0] + ".txt"), "w") as f:
+                for cls, xc, yc, bw, bh in processed_boxes:
+                    f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
 
-        print(f"Processed {fname}")
+        if verbose:
+            print(f"Processed {fname}")
