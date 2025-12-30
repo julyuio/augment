@@ -5,3 +5,4 @@ from .contrast import adjContrast_main as adjContrast
 from .brightness import adjBrightness_main as adjBrightness
 from .grayscale import convertGrayscale_main as convertGrayscale
 from .desaturate import desaturate_main as desaturate
+from .colorJitter import colorJitter_main as colorJitter
