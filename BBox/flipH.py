@@ -2,6 +2,8 @@ import os
 import cv2
 import numpy as np
 
+from .core import process_dataset
+
 # ---------------------------------------------------------
 # HORIZONTAL FLIP IMAGE
 # ---------------------------------------------------------
