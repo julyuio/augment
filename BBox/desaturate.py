@@ -33,7 +33,7 @@ def desaturate_boxes(boxes):
 # ---------------------------------------------------------
 def desaturate_main (root_dir, output_dir, debug=False, verbose=True, factor=1.5):
     if verbose: 
-        print(f'>> convert grayscale for : {root_dir}')
+        print(f'>> desaturate for : {root_dir}')
     
     # process dataset is main function in core.py that repeats for all other actions/tasks (flipV, flipH, brightness.... ect)
     process_dataset(root_dir,
@@ -45,4 +45,6 @@ def desaturate_main (root_dir, output_dir, debug=False, verbose=True, factor=1.5
                     factor)
     
     if verbose: 
-        print(f'>> adjContrast completed ')
+        print(f'>> desaturate completed ')
+
+        

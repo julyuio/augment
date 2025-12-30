@@ -192,7 +192,7 @@ def process_dataset(root_dir, output_dir, debug=True, verbose=True, factor=90 ):
 # ---------------------------------------------------------
 def rotateImg_main (root_dir, output_dir, debug=False, verbose=True, factor=90):
     if verbose: 
-        print(f'>> convert grayscale for : {root_dir}')
+        print(f'>> rotate for : {root_dir}')
     
     # process dataset for rotate is different from the others 
     process_dataset(root_dir,
@@ -202,5 +202,5 @@ def rotateImg_main (root_dir, output_dir, debug=False, verbose=True, factor=90):
                     factor)
     
     if verbose: 
-        print(f'>> adjContrast completed ')
+        print(f'>> rotate completed ')
 

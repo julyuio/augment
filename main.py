@@ -7,7 +7,7 @@ import os
 #from brightness import brightness_dataset
 #from flipH import flipH 
 
-from BBox import flipH, flipV, adjContrast, adjBrightness, convertGrayscale, desaturate ,colorJitter, rotateImg
+from BBox import flipH, flipV, adjContrast, adjBrightness, convertGrayscale, addNoise, desaturate ,colorJitter, rotateImg
 
 
 datasetDir='train'          # input dir where all your training images and labels are (YOLO format) 
@@ -24,3 +24,6 @@ convertGrayscale(datasetDir , output_dir, debug=True ,verbose=True)
 desaturate(datasetDir , output_dir, debug=True ,verbose=True, factor=0.5) # to 1
 colorJitter(datasetDir , output_dir, debug=True ,verbose=True, factor=[0.5, 0.6, 0.6]) # brightness , contrast , saturation
 rotateImg(datasetDir , output_dir, debug=True ,verbose=True, factor=30)
+rotateImg(datasetDir , output_dir, debug=True ,verbose=True, factor=146)
+
+addNoise(datasetDir , output_dir, debug=True ,verbose=True, factor=70)
