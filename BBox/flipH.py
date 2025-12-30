@@ -28,8 +28,8 @@ def flip_yolo_boxes_horizontal(boxes):
     return flipped_boxes
 
 
-def flipH_dataset (root_dir,output_dir, debug=False, verbose=True):
-     if verbose:
+def flipH_main (root_dir,output_dir, debug=False, verbose=True):
+    if verbose:
         print(f'>> flipping along horizontal : {root_dir}')
     
     # process dataset is main function in core.py that repeats for all other actions/tasks (flipV, flipH, brightness.... ect)
@@ -39,11 +39,4 @@ def flipH_dataset (root_dir,output_dir, debug=False, verbose=True):
         print(f'>> flipH completed ')
 
 
-# ---------------------------------------------------------
-# RUN
-# ---------------------------------------------------------
-if __name__ == "__main__":
-    process_dataset(
-        root_dir="train",
-        output_dir="train_flipped_H"
-    )
+
