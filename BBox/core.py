@@ -62,7 +62,7 @@ def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verb
                 boxes.append([cls, xc, yc, bw, bh])
 
         # process image + boxes
-        processed_img = func_img(img)
+        processed_img = func_img(img,factor)
         processed_boxes = func_label(boxes)
 
         # Save processed image

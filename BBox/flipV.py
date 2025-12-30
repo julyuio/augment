@@ -7,7 +7,7 @@ from .core import process_dataset
 # ---------------------------------------------------------
 # VERTICAL FLIP IMAGE
 # ---------------------------------------------------------
-def flipV(img):
+def flipV(img, factor=0):
     flipped = cv2.flip(img, 0)  # 0 = vertical flip
     return flipped
 

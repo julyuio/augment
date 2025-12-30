@@ -16,3 +16,5 @@ output_dir='trainAugmented' # results folder can also be the same name as datase
 flipV(datasetDir , output_dir, debug=True ,verbose=True)
 flipH(datasetDir , output_dir, debug=True ,verbose=True)
 adjContrast(datasetDir , output_dir, debug=True ,verbose=True, factor=1.5)
+adjBrightness()
+
