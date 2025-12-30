@@ -117,7 +117,7 @@ def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2):
 #         print(f"Processed {fname}")
 
 
-def flipV (root_dir, output_dir, debug=True, verbose=True):
+def flipV (root_dir, output_dir, debug=False, verbose=True):
     if verbose: 
         print(f'>> Flipping along vertical : {root_dir}')
     process_dataset(root_dir, output_dir, flip_image_vertical, flip_yolo_boxes_vertical, debug, verbose)

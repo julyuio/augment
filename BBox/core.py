@@ -66,6 +66,9 @@ def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verb
         processed_boxes = func_label(boxes)
 
         # Save processed image
+        # this adds '_flipH' for example to the name in order to remember what has been done to the image and label
+        addtofname =  '_' + func_img.__name__ 
+        #now create a new fname 
         new_fname = os.path.splitext(fname)[0] + addtofname + os.path.splitext(fname)[1]
         out_img_path = os.path.join(out_img_dir, new_fname )
         cv2.imwrite(out_img_path, processed_img)
@@ -76,13 +79,13 @@ def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verb
             for cls, xc, yc, bw, bh in processed_boxes:
                 f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
 
-        if debug:
+        if debug: 
             # Debug image with drawn boxes
             debug_img = draw_boxes(processed_img, processed_boxes)
-            cv2.imwrite(os.path.join(debug_img_dir, fname), debug_img)
+            cv2.imwrite(os.path.join(debug_img_dir, new_fname), debug_img)
 
             # Copy labels to debug folder
-            with open(os.path.join(debug_lbl_dir, os.path.splitext(fname)[0] + ".txt"), "w") as f:
+            with open(os.path.join(debug_lbl_dir, os.path.splitext(new_fname)[0] + ".txt"), "w") as f:
                 for cls, xc, yc, bw, bh in processed_boxes:
                     f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
 

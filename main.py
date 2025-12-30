@@ -13,5 +13,5 @@ datasetDir='train'          # input dir where all your training images and label
 output_dir='trainAugmented' # results folder can also be the same name as dataset  
 
 
-flipH(datasetDir , output_dir)
-flipV(datasetDir , output_dir, verbose=False)
+#flipH(datasetDir , output_dir)
+flipV(datasetDir , output_dir, debug=True ,verbose=True)
