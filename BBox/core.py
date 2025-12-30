@@ -23,7 +23,7 @@ def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2):
 
 
 
-def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verbose=True ):
+def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verbose=True, factor=0 ):
     img_dir = os.path.join(root_dir, "images")
     lbl_dir = os.path.join(root_dir, "labels")
 
