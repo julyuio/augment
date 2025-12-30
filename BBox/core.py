@@ -21,7 +21,9 @@ def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2):
 
     return debug_img
 
-
+# ---------------------------------------------------------
+# PROCESS DATASET -  a common function for most of the actions (not for rotate)
+# ---------------------------------------------------------
 
 def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verbose=True, factor=0 ):
     img_dir = os.path.join(root_dir, "images")
@@ -64,14 +66,15 @@ def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verb
         # process image + boxes
         processed_img = func_img(img,factor)
         processed_boxes = func_label(boxes)
-
+           
         # Save processed image
-        # this adds '_flipH' for example to the name in order to remember what has been done to the image and label
-
         if isinstance(factor, list):
-            factor = "_".join(map(str, factor))
-        addtofname = '_' + func_img.__name__ + f'{factor}'
-        #now create a new fname 
+                factorstr = "_".join(map(str, factor))
+                addtofname = '_' + func_img.__name__ + f'{factorstr}'
+        else:
+                addtofname = '_' + func_img.__name__ + f'{factor}'
+        
+        # now create a new fname 
         new_fname = os.path.splitext(fname)[0] + addtofname + os.path.splitext(fname)[1]
         out_img_path = os.path.join(out_img_dir, new_fname )
         cv2.imwrite(out_img_path, processed_img)

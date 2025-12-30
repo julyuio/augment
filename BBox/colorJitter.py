@@ -8,11 +8,7 @@ from .core import process_dataset
 # Color Jitter (Brightness / Contrast / Saturation / Hue)
 # ---------------------------------------------------------
 def colorJitter(img,factor=[0.2, 0.2, 0.2]):
-    #brightness=0.2
-    #contrast=0.2
-    #saturation=0.2
     brightness = factor[0]
-    breakpoint()
     contrast = factor[1]
     saturation = factor[2]
 

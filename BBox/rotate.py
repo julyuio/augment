@@ -5,7 +5,8 @@ import numpy as np
 # ---------------------------------------------------------
 # ROTATE IMAGE WITHOUT CROPPING
 # ---------------------------------------------------------
-def rotate_image_no_crop(img, angle_cw):
+def rotate_img(img, factor=90):
+    angle_cw = factor
     h, w = img.shape[:2]
     angle_ccw = -angle_cw  # OpenCV rotates CCW
 
@@ -79,27 +80,44 @@ def rotate_yolo_boxes_no_crop(boxes, M, orig_w, orig_h, new_w, new_h):
 # ---------------------------------------------------------
 # DRAW DEBUG BOXES
 # ---------------------------------------------------------
-def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2):
+def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2, alpha=0.3):
     h, w = img.shape[:2]
     debug_img = img.copy()
+    overlay = img.copy()
 
     for cls, xc, yc, bw, bh in boxes:
+        # Convert normalized YOLO coords → pixel coords
         x1 = int((xc - bw / 2) * w)
         y1 = int((yc - bh / 2) * h)
         x2 = int((xc + bw / 2) * w)
         y2 = int((yc + bh / 2) * h)
 
+        # --- Filled transparent rectangle ---
+        cv2.rectangle(overlay, (x1, y1), (x2, y2), color, -1)
+
+        # --- Label background ---
+        label = str(cls)
+        (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)
+        cv2.rectangle(overlay, (x1, y1 - th - 6), (x1 + tw + 4, y1), color, -1)
+
+        # --- Outline ---
         cv2.rectangle(debug_img, (x1, y1), (x2, y2), color, thickness)
-        cv2.putText(debug_img, str(cls), (x1, y1 - 5),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+
+        # --- Label text ---
+        cv2.putText(debug_img, label, (x1 + 2, y1 - 4),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
+
+    # Blend overlay → debug_img
+    cv2.addWeighted(overlay, alpha, debug_img, 1 - alpha, 0, debug_img)
 
     return debug_img
+
 
 
 # ---------------------------------------------------------
 # PROCESS DATASET
 # ---------------------------------------------------------
-def process_dataset(root_dir, output_dir, angle_cw):
+def process_dataset(root_dir, output_dir, debug=True, verbose=True, factor=90 ):
     img_dir = os.path.join(root_dir, "images")
     lbl_dir = os.path.join(root_dir, "labels")
 
@@ -139,37 +157,50 @@ def process_dataset(root_dir, output_dir, angle_cw):
                 boxes.append([cls, xc, yc, bw, bh])
 
         # Rotate image + boxes
-        rotated_img, M, new_w, new_h = rotate_image_no_crop(img, angle_cw)
+        angle_cw = factor
+        rotated_img, M, new_w, new_h = rotate_img(img, angle_cw)
         rotated_boxes = rotate_yolo_boxes_no_crop(boxes, M, orig_w, orig_h, new_w, new_h)
-
-        # Save rotated image
-        out_img_path = os.path.join(out_img_dir, fname)
+        
+        addtofname = '_rotate' + f'{factor}'
+        #now create a new fname 
+        new_fname = os.path.splitext(fname)[0] + addtofname + os.path.splitext(fname)[1]
+        out_img_path = os.path.join(out_img_dir, new_fname )
         cv2.imwrite(out_img_path, rotated_img)
 
-        # Save rotated labels
-        out_txt_path = os.path.join(out_lbl_dir, os.path.splitext(fname)[0] + ".txt")
+        # Save processed labels
+        out_txt_path = os.path.join(out_lbl_dir, os.path.splitext(new_fname)[0] + ".txt")
         with open(out_txt_path, "w") as f:
             for cls, xc, yc, bw, bh in rotated_boxes:
                 f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
 
-        # Debug image with drawn boxes
-        debug_img = draw_boxes(rotated_img, rotated_boxes)
-        cv2.imwrite(os.path.join(debug_img_dir, fname), debug_img)
+        if debug: 
+            # Debug image with drawn boxes
+            debug_img = draw_boxes(rotated_img, rotated_boxes)
+            cv2.imwrite(os.path.join(debug_img_dir, new_fname), debug_img)
 
-        # Copy labels to debug folder
-        with open(os.path.join(debug_lbl_dir, os.path.splitext(fname)[0] + ".txt"), "w") as f:
-            for cls, xc, yc, bw, bh in rotated_boxes:
-                f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
+            # Copy labels to debug folder
+            with open(os.path.join(debug_lbl_dir, os.path.splitext(new_fname)[0] + ".txt"), "w") as f:
+                for cls, xc, yc, bw, bh in rotated_boxes:
+                    f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
 
-        print(f"Processed {fname}")
+        if verbose:
+            print(f"Processed {fname}")
 
 
 # ---------------------------------------------------------
-# RUN
+# Main entry from __init__ 
 # ---------------------------------------------------------
-if __name__ == "__main__":
-    process_dataset(
-        root_dir="train",
-        output_dir="augmented_30deg",
-        angle_cw=30  # change angle here
-    )
+def rotateImg_main (root_dir, output_dir, debug=False, verbose=True, factor=90):
+    if verbose: 
+        print(f'>> convert grayscale for : {root_dir}')
+    
+    # process dataset for rotate is different from the others 
+    process_dataset(root_dir,
+                    output_dir,
+                    debug,
+                    verbose,
+                    factor)
+    
+    if verbose: 
+        print(f'>> adjContrast completed ')
+
