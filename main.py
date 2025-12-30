@@ -7,7 +7,7 @@ import os
 #from brightness import brightness_dataset
 #from flipH import flipH 
 
-from BBox import flipH, flipV, adjContrast, adjBrightness
+from BBox import flipH, flipV, adjContrast, adjBrightness, convertGrayscale
 
 datasetDir='train'          # input dir where all your training images and labels are (YOLO format) 
 output_dir='trainAugmented' # results folder can also be the same name as dataset  
@@ -19,4 +19,4 @@ adjContrast(datasetDir , output_dir, debug=True ,verbose=True, factor=1.5)
 adjContrast(datasetDir , output_dir, debug=True ,verbose=True, factor=0.2)
 adjBrightness(datasetDir , output_dir, debug=True ,verbose=True, factor=90) #delta 20, positive increase , negative decrease 
 adjBrightness(datasetDir , output_dir, debug=True ,verbose=True, factor=20) #delta 20, positive increase , negative decrease 
-
+convertGrayscale(datasetDir , output_dir, debug=True ,verbose=True)
