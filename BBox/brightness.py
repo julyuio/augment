@@ -2,10 +2,12 @@ import os
 import cv2
 import numpy as np
 
+from .core import process_dataset
+
 # ---------------------------------------------------------
 # ADJUST BRIGHTNESS
 # ---------------------------------------------------------
-def adjBrightness(img, delta=40):
+def adjBrightness(img, delta=20):
     """
     Adjust brightness by adding a constant value.
     delta > 0 → brighter
@@ -39,8 +41,8 @@ def adjBrightness_main (root_dir, output_dir, debug=False, verbose=True, factor=
     process_dataset(root_dir,
                     output_dir,
                     adjBrightness,  # func_img argument
-                    adjContrast_boxes, # func_label argument
-                    debug,
+                    adjBrightness_boxes, # func_label argument
+                    debug, 
                     verbose,
                     factor)
     

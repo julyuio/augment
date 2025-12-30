@@ -5,7 +5,7 @@ import numpy as np
 # ---------------------------------------------------------
 # CONVERT IMAGE TO GRAYSCALE (3-channel output)
 # ---------------------------------------------------------
-def convert_to_grayscale(img):
+def convertGrayscale(img):
     """
     Converts image to grayscale but returns 3-channel output
     so YOLO models can still train on it.
