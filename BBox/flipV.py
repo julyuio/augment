@@ -7,7 +7,7 @@ from .core import process_dataset
 # ---------------------------------------------------------
 # VERTICAL FLIP IMAGE
 # ---------------------------------------------------------
-def flip_image_vertical(img):
+def flipV(img):
     flipped = cv2.flip(img, 0)  # 0 = vertical flip
     return flipped
 
@@ -51,76 +51,13 @@ def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2):
 
 
 # ---------------------------------------------------------
-# PROCESS DATASET
+# Main entry function
 # ---------------------------------------------------------
-# def process_dataset(root_dir, output_dir):
-#     img_dir = os.path.join(root_dir, "images")
-#     lbl_dir = os.path.join(root_dir, "labels")
-
-#     out_img_dir = os.path.join(output_dir, "images")
-#     out_lbl_dir = os.path.join(output_dir, "labels")
-
-#     debug_img_dir = os.path.join(output_dir + "_debug", "images")
-#     debug_lbl_dir = os.path.join(output_dir + "_debug", "labels")
-
-#     os.makedirs(out_img_dir, exist_ok=True)
-#     os.makedirs(out_lbl_dir, exist_ok=True)
-#     os.makedirs(debug_img_dir, exist_ok=True)
-#     os.makedirs(debug_lbl_dir, exist_ok=True)
-
-#     for fname in os.listdir(img_dir):
-#         if not fname.lower().endswith((".jpg", ".png", ".jpeg")):
-#             continue
-
-#         img_path = os.path.join(img_dir, fname)
-#         txt_path = os.path.join(lbl_dir, os.path.splitext(fname)[0] + ".txt")
-
-#         if not os.path.exists(txt_path):
-#             print(f"Skipping {fname}: no label file")
-#             continue
-
-#         # Load image
-#         img = cv2.imread(img_path)
-
-#         # Load YOLO labels
-#         boxes = []
-#         with open(txt_path, "r") as f:
-#             for line in f:
-#                 parts = line.strip().split()
-#                 cls = int(parts[0])
-#                 xc, yc, bw, bh = map(float, parts[1:])
-#                 boxes.append([cls, xc, yc, bw, bh])
-
-#         # Flip image + boxes
-#         flipped_img = flip_image_vertical(img)
-#         flipped_boxes = flip_yolo_boxes_vertical(boxes)
-
-#         # Save flipped image
-#         out_img_path = os.path.join(out_img_dir, fname)
-#         cv2.imwrite(out_img_path, flipped_img)
-
-#         # Save flipped labels
-#         out_txt_path = os.path.join(out_lbl_dir, os.path.splitext(fname)[0] + ".txt")
-#         with open(out_txt_path, "w") as f:
-#             for cls, xc, yc, bw, bh in flipped_boxes:
-#                 f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
-
-#         # Debug image with drawn boxes
-#         debug_img = draw_boxes(flipped_img, flipped_boxes)
-#         cv2.imwrite(os.path.join(debug_img_dir, fname), debug_img)
-
-#         # Copy labels to debug folder
-#         with open(os.path.join(debug_lbl_dir, os.path.splitext(fname)[0] + ".txt"), "w") as f:
-#             for cls, xc, yc, bw, bh in flipped_boxes:
-#                 f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
-
-#         print(f"Processed {fname}")
-
-
-def flipV (root_dir, output_dir, debug=False, verbose=True):
+def flipV_main (root_dir, output_dir, debug=False, verbose=True):
     if verbose: 
-        print(f'>> Flipping along vertical : {root_dir}')
-    process_dataset(root_dir, output_dir, flip_image_vertical, flip_yolo_boxes_vertical, debug, verbose)
+        print(f'>> flipping along vertical : {root_dir}')
+    # process dataset is main function in core.py that repeats for all other actions/tasks (flipV, flipH, brightness.... ect)
+    process_dataset(root_dir, output_dir, flipV, flip_yolo_boxes_vertical, debug, verbose)
     if verbose: 
         print(f'>> flipV completed ')
 
