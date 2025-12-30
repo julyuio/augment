@@ -1,4 +1,10 @@
 train*/
 __pycache__/
+*.png
+*.jpeg
+*.jpg
+*.JPG
+*.JPEG
+*.PNG
 
 

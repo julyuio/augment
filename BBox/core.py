@@ -3,32 +3,6 @@ import cv2
 import numpy as np
 
 # ---------------------------------------------------------
-# VERTICAL FLIP IMAGE
-# ---------------------------------------------------------
-def flip_image_vertical(img):
-    flipped = cv2.flip(img, 0)  # 0 = vertical flip
-    return flipped
-
-
-# ---------------------------------------------------------
-# VERTICAL FLIP YOLO BOXES
-# ---------------------------------------------------------
-def flip_yolo_boxes_vertical(boxes):
-    flipped_boxes = []
-
-    for cls, xc, yc, bw, bh in boxes:
-        # Vertical flip: y_center becomes (1 - y_center)
-        new_xc = xc
-        new_yc = 1.0 - yc
-        new_bw = bw
-        new_bh = bh
-
-        flipped_boxes.append([cls, new_xc, new_yc, new_bw, new_bh])
-
-    return flipped_boxes
-
-
-# ---------------------------------------------------------
 # DRAW DEBUG BOXES
 # ---------------------------------------------------------
 def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2):
@@ -48,10 +22,8 @@ def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2):
     return debug_img
 
 
-# ---------------------------------------------------------
-# PROCESS DATASET
-# ---------------------------------------------------------
-def process_dataset(root_dir, output_dir):
+
+def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verbose=True ):
     img_dir = os.path.join(root_dir, "images")
     lbl_dir = os.path.join(root_dir, "labels")
 
@@ -90,43 +62,26 @@ def process_dataset(root_dir, output_dir):
                 boxes.append([cls, xc, yc, bw, bh])
 
         # Flip image + boxes
-        flipped_img = flip_image_vertical(img)
-        flipped_boxes = flip_yolo_boxes_vertical(boxes)
+        processed_img = func_img(img)
+        processed_boxes = func_label(boxes)
 
         # Save flipped image
         out_img_path = os.path.join(out_img_dir, fname)
-        cv2.imwrite(out_img_path, flipped_img)
+        cv2.imwrite(out_img_path, processed_img)
 
         # Save flipped labels
         out_txt_path = os.path.join(out_lbl_dir, os.path.splitext(fname)[0] + ".txt")
         with open(out_txt_path, "w") as f:
-            for cls, xc, yc, bw, bh in flipped_boxes:
+            for cls, xc, yc, bw, bh in processed_boxes:
                 f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
 
         # Debug image with drawn boxes
-        debug_img = draw_boxes(flipped_img, flipped_boxes)
+        debug_img = draw_boxes(processed_img, processed_boxes)
         cv2.imwrite(os.path.join(debug_img_dir, fname), debug_img)
 
         # Copy labels to debug folder
         with open(os.path.join(debug_lbl_dir, os.path.splitext(fname)[0] + ".txt"), "w") as f:
-            for cls, xc, yc, bw, bh in flipped_boxes:
+            for cls, xc, yc, bw, bh in processed_boxes:
                 f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
 
         print(f"Processed {fname}")
-
-
-def flipV_dataset (root_dir,output_dir):
-    print(f'>> Fliping along vertical : {root_dir}')
-    process_dataset(root_dir, output_dir)
-    print(f'>> flipV completed ')
-
-
-# ---------------------------------------------------------
-# RUN
-# ---------------------------------------------------------
-if __name__ == "__main__":
-    process_dataset(
-        root_dir="train",
-        output_dir="train_flipped_vertical"
-    )
-
