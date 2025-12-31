@@ -2,6 +2,12 @@ import os
 import cv2
 import numpy as np
 
+
+
+
+
+
+
 # ---------------------------------------------------------
 # DRAW DEBUG BOXES (with filled + transparent overlay)
 # ---------------------------------------------------------
@@ -41,10 +47,26 @@ def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2, alpha=0.3):
 
 
 # ---------------------------------------------------------
+#  copy BOXES - use this funtion if you want to add anything extra when you copy to the new BBoxes. 
+#   this mainly used for image transformations ( brightness, color jitter, contrast ...ect) and not for rotate or flip   
+# ---------------------------------------------------------
+def copy_boxes(boxes):
+    new_boxes = []
+    for cls, xc, yc, bw, bh in boxes:
+        # change here if you want the new bboxes to do something different
+        new_xc = xc
+        new_yc = yc
+        new_bw = bw
+        new_bh = bh
+        new_boxes.append([cls, new_xc, new_yc, new_bw, new_bh])
+    return new_boxes
+
+
+# ---------------------------------------------------------
 # PROCESS DATASET -  a common function for most of the actions (not for rotate)
 # ---------------------------------------------------------
 
-def process_dataset(root_dir, output_dir, func_img ,func_label, debug=True, verbose=True, factor=0 ):
+def process_dataset(root_dir, output_dir, func_img ,func_label=copy_boxes, debug=True, verbose=True, factor=0 ):
     img_dir = os.path.join(root_dir, "images")
     lbl_dir = os.path.join(root_dir, "labels")
 
