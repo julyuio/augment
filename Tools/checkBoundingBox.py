@@ -59,5 +59,6 @@ def draw_boxes(image_path, txt_path, output_path="output.jpg"):
 
 
 if __name__ == "__main__":
+    
     # Example usage
     draw_boxes("train/images/703.jpg", "train/labels/703.txt", "result.jpg")

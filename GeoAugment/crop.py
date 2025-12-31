@@ -88,8 +88,9 @@ def process_dataset_crop(root_dir, output_dir, debug=False, verbose=True, factor
 
     os.makedirs(out_img_dir, exist_ok=True)
     os.makedirs(out_lbl_dir, exist_ok=True)
-    os.makedirs(debug_img_dir, exist_ok=True)
-    os.makedirs(debug_lbl_dir, exist_ok=True)
+    if debug:
+        os.makedirs(debug_img_dir, exist_ok=True)
+        os.makedirs(debug_lbl_dir, exist_ok=True)
 
     for fname in os.listdir(img_dir):
         if not fname.lower().endswith((".jpg", ".png", ".jpeg")):

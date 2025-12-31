@@ -123,14 +123,15 @@ def process_dataset(root_dir, output_dir, debug=True, verbose=True, factor=90 ):
 
     out_img_dir = os.path.join(output_dir, "images")
     out_lbl_dir = os.path.join(output_dir, "labels")
-
-    debug_img_dir = os.path.join(output_dir + "_debug", "images")
-    debug_lbl_dir = os.path.join(output_dir + "_debug", "labels")
+    if debug:    
+        debug_img_dir = os.path.join(output_dir + "_debug", "images")
+        debug_lbl_dir = os.path.join(output_dir + "_debug", "labels")
 
     os.makedirs(out_img_dir, exist_ok=True)
     os.makedirs(out_lbl_dir, exist_ok=True)
-    os.makedirs(debug_img_dir, exist_ok=True)
-    os.makedirs(debug_lbl_dir, exist_ok=True)
+    if debug:        
+        os.makedirs(debug_img_dir, exist_ok=True)
+        os.makedirs(debug_lbl_dir, exist_ok=True)
 
     for fname in os.listdir(img_dir):
         if not fname.lower().endswith((".jpg", ".png", ".jpeg")):
