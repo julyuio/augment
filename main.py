@@ -2,22 +2,24 @@
 
 import os
 from BBox import flipH, flipV, adjContrast, adjBrightness, convertGrayscale, addNoise, desaturate ,colorJitter, rotateImg
-
+from GeoTransform import cropBoxes
 
 datasetDir='./train'          # input dir where all your training images and labels are (YOLO format) 
 output_dir='./trainAugmented' # results folder can also be the same name as dataset  
 
 
 flipV(datasetDir , output_dir, debug=True ,verbose=True)
-flipH(datasetDir , output_dir, debug=True ,verbose=True)
-adjContrast(datasetDir , output_dir, debug=True ,verbose=True, factor=1.5)
-adjContrast(datasetDir , output_dir, debug=True ,verbose=True, factor=0.2)
-adjBrightness(datasetDir , output_dir, debug=True ,verbose=True, factor=90) #delta 20, positive increase , negative decrease 
-adjBrightness(datasetDir , output_dir, debug=True ,verbose=True, factor=20) #delta 20, positive increase , negative decrease 
-convertGrayscale(datasetDir , output_dir, debug=True ,verbose=True)
-desaturate(datasetDir , output_dir, debug=True ,verbose=True, factor=0.5) # to 1
-colorJitter(datasetDir , output_dir, debug=True ,verbose=True, factor=[0.5, 0.6, 0.6]) # brightness , contrast , saturation
-rotateImg(datasetDir , output_dir, debug=True ,verbose=True, factor=30)
-rotateImg(datasetDir , output_dir, debug=True ,verbose=True, factor=146)
+# flipH(datasetDir , output_dir, debug=True ,verbose=True)
+# adjContrast(datasetDir , output_dir, debug=True ,verbose=True, factor=1.5)
+# adjContrast(datasetDir , output_dir, debug=True ,verbose=True, factor=0.2)
+# adjBrightness(datasetDir , output_dir, debug=True ,verbose=True, factor=90) #delta 20, positive increase , negative decrease 
+# adjBrightness(datasetDir , output_dir, debug=True ,verbose=True, factor=20) #delta 20, positive increase , negative decrease 
+# convertGrayscale(datasetDir , output_dir, debug=True ,verbose=True)
+# desaturate(datasetDir , output_dir, debug=True ,verbose=True, factor=0.5) # to 1
+# colorJitter(datasetDir , output_dir, debug=True ,verbose=True, factor=[0.5, 0.6, 0.6]) # brightness , contrast , saturation
+# rotateImg(datasetDir , output_dir, debug=True ,verbose=True, factor=30)
+# rotateImg(datasetDir , output_dir, debug=True ,verbose=True, factor=146)
 
-addNoise(datasetDir , output_dir, debug=True ,verbose=True, factor=70)
+# addNoise(datasetDir , output_dir, debug=True ,verbose=True, factor=70)
+
+cropBoxes(datasetDir , output_dir, debug=True ,verbose=True, factor=0.05)

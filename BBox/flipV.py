@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 
-from .core import process_dataset
+from ../core/core import process_dataset
 
 # ---------------------------------------------------------
 # VERTICAL FLIP IMAGE

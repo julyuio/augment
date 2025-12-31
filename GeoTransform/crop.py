@@ -75,15 +75,16 @@ def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2):
 # ---------------------------------------------------------
 # PROCESS DATASET
 # ---------------------------------------------------------
-def process_dataset_crop(root_dir, output_dir, padding=0.05):
+def process_dataset_crop(root_dir, output_dir, debug=False, verbose=True, factor=0.05):
     img_dir = os.path.join(root_dir, "images")
     lbl_dir = os.path.join(root_dir, "labels")
 
     out_img_dir = os.path.join(output_dir, "images")
     out_lbl_dir = os.path.join(output_dir, "labels")
-
-    debug_img_dir = os.path.join(output_dir + "_debug", "images")
-    debug_lbl_dir = os.path.join(output_dir + "_debug", "labels")
+    
+    if debug:
+        debug_img_dir = os.path.join(output_dir + "_debug", "images")
+        debug_lbl_dir = os.path.join(output_dir + "_debug", "labels")
 
     os.makedirs(out_img_dir, exist_ok=True)
     os.makedirs(out_lbl_dir, exist_ok=True)
@@ -127,16 +128,17 @@ def process_dataset_crop(root_dir, output_dir, padding=0.05):
                 cls, xc, yc, bw, bh = crop_box
                 f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
 
-            # Debug image
-            debug_img = draw_boxes(crop_img, [crop_box])
-            cv2.imwrite(os.path.join(debug_img_dir, crop_name), debug_img)
+            if debug:
+                # Debug image
+                debug_img = draw_boxes(crop_img, [crop_box])
+                cv2.imwrite(os.path.join(debug_img_dir, crop_name), debug_img)
 
-            # Copy label to debug
-            with open(os.path.join(debug_lbl_dir, label_name), "w") as f:
-                cls, xc, yc, bw, bh = crop_box
-                f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
-
-        print(f"Processed {fname}")
+                # Copy label to debug
+                with open(os.path.join(debug_lbl_dir, label_name), "w") as f:
+                    cls, xc, yc, bw, bh = crop_box
+                    f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
+        if verbose:
+            print(f"Processed {fname}")
 
 
 # ---------------------------------------------------------
@@ -149,8 +151,6 @@ def crop_main (root_dir, output_dir, debug=False, verbose=True, factor=0.05):
     # process dataset is main function in core.py that repeats for all other actions/tasks (flipV, flipH, brightness.... ect) except rotate
     process_dataset_crop(root_dir = root_dir ,
                     output_dir = output_dir ,
-                    func_img = desaturate,  # func_img argument
-                    func_label = copy_boxes, # func_label argument
                     debug = debug , 
                     verbose = verbose,
                     factor = factor) # 5% padding around each crop
