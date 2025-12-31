@@ -74,8 +74,9 @@ def process_dataset(root_dir, output_dir, func_img ,func_label=copy_boxes, debug
 
     os.makedirs(out_img_dir, exist_ok=True)
     os.makedirs(out_lbl_dir, exist_ok=True)
-    os.makedirs(debug_img_dir, exist_ok=True)
-    os.makedirs(debug_lbl_dir, exist_ok=True)
+    if debug:
+        os.makedirs(debug_img_dir, exist_ok=True)
+        os.makedirs(debug_lbl_dir, exist_ok=True)
 
     for fname in os.listdir(img_dir):
         if not fname.lower().endswith((".jpg", ".png", ".jpeg")):
