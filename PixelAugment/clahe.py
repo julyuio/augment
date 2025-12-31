@@ -5,48 +5,31 @@ import numpy as np
 
 from .core import process_dataset, copy_boxes
 # ---------------------------------------------------------
-#  HSV randomization
+#  CLAHE / Histogram Equalization
 # ---------------------------------------------------------
-def randHSV(img,factor=[10, 0.3, 0.3]):
-    h_range = factor[0]
-    s_range = factor[1]
-    v_range = factor[2]
-
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(np.float32)
-
-    # Random hue shift
-    hsv[...,0] += np.random.uniform(-h_range, h_range)
-
-    # Random saturation scaling
-    hsv[...,1] *= (1 + np.random.uniform(-s_range, s_range))
-
-    # Random brightness scaling
-    hsv[...,2] *= (1 + np.random.uniform(-v_range, v_range))
-
-    # Clip and convert back
-    hsv = np.clip(hsv, 0, 255).astype(np.uint8)
-    return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
-
-
-
+def clahe(img,factor=0):
+    lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+    l, a, b = cv2.split(lab)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    l = clahe.apply(l)
+    lab = cv2.merge((l,a,b))
+    return cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
 
 
 # ---------------------------------------------------------
 # Main entry from __init__ 
 # ---------------------------------------------------------
-def randHSV_main (root_dir, output_dir, debug=False, verbose=True, factor=[10, 0.3, 0.3]):
+def clahe_main (root_dir, output_dir, debug=False, verbose=True):
     if verbose: 
         print(f'>> convert grayscale for : {root_dir}')
     
-
     # process dataset is main function in core.py that repeats for all other actions/tasks (flipV, flipH, brightness.... ect) except rotate
     process_dataset(root_dir = root_dir ,
                     output_dir = output_dir ,
-                    func_img = randHSV,  # func_img argument
+                    func_img = clahe,  # func_img argument
                     func_label = copy_boxes, # func_label argument
                     debug = debug , 
-                    verbose = verbose,
-                    factor = factor)
+                    verbose = verbose,)
     
     if verbose: 
         print(f'>> adjContrast completed ')

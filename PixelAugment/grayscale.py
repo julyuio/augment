@@ -21,7 +21,7 @@ def convertGrayscale(img,factor=0):
 # ---------------------------------------------------------
 # Main entry from __init__ 
 # ---------------------------------------------------------
-def convertGrayscale_main (root_dir, output_dir, debug=False, verbose=True, factor=1.5):
+def convertGrayscale_main (root_dir, output_dir, debug=False, verbose=True):
     if verbose: 
         print(f'>> convert grayscale for : {root_dir}')
     
@@ -31,8 +31,7 @@ def convertGrayscale_main (root_dir, output_dir, debug=False, verbose=True, fact
                     func_img = convertGrayscale,  # func_img argument
                     func_label = copy_boxes, # func_label argument
                     debug = debug , 
-                    verbose = verbose,
-                    factor = factor)
+                    verbose = verbose)
     
     if verbose: 
         print(f'>> adjContrast completed ')
