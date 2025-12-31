@@ -3,11 +3,6 @@ import cv2
 import numpy as np
 
 
-
-
-
-
-
 # ---------------------------------------------------------
 # DRAW DEBUG BOXES (with filled + transparent overlay)
 # ---------------------------------------------------------

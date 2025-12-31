@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import os
-from BBox import flipH, flipV, adjContrast, adjBrightness, convertGrayscale, addNoise, desaturate ,colorJitter, rotateImg
-from GeoTransform import cropBoxes
+from PixelTransform import  adjContrast, adjBrightness, convertGrayscale, addNoise, desaturate ,colorJitter
+from GeoTransform import cropBoxes,flipH, flipV, rotateImg
 
 datasetDir='./train'          # input dir where all your training images and labels are (YOLO format) 
 output_dir='./trainAugmented' # results folder can also be the same name as dataset  
@@ -22,4 +22,4 @@ flipV(datasetDir , output_dir, debug=True ,verbose=True)
 
 # addNoise(datasetDir , output_dir, debug=True ,verbose=True, factor=70)
 
-cropBoxes(datasetDir , output_dir, debug=True ,verbose=True, factor=0.05)
+cropBoxes(datasetDir , output_dir, debug=True ,verbose=True, factor=0.10)

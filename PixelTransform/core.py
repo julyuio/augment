@@ -1,0 +1,136 @@
+import os
+import cv2
+import numpy as np
+
+
+# ---------------------------------------------------------
+# DRAW DEBUG BOXES (with filled + transparent overlay)
+# ---------------------------------------------------------
+def draw_boxes(img, boxes, color=(0, 255, 0), thickness=2, alpha=0.3):
+    h, w = img.shape[:2]
+
+    debug_img = img.copy()
+    overlay = img.copy()
+
+    for cls, xc, yc, bw, bh in boxes:
+        # Convert YOLO normalized coords → pixel coords
+        x1 = int((xc - bw / 2) * w)
+        y1 = int((yc - bh / 2) * h)
+        x2 = int((xc + bw / 2) * w)
+        y2 = int((yc + bh / 2) * h)
+
+        # --- Filled transparent rectangle ---
+        cv2.rectangle(overlay, (x1, y1), (x2, y2), color, -1)
+
+        # --- Label background ---
+        label = str(cls)
+        (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)
+        cv2.rectangle(overlay, (x1, y1 - th - 6), (x1 + tw + 4, y1), color, -1)
+
+        # --- Outline ---
+        cv2.rectangle(debug_img, (x1, y1), (x2, y2), color, thickness)
+
+        # --- Label text ---
+        cv2.putText(debug_img, label, (x1 + 2, y1 - 4),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
+
+    # Blend overlay → debug_img
+    cv2.addWeighted(overlay, alpha, debug_img, 1 - alpha, 0, debug_img)
+
+    return debug_img
+
+
+
+# ---------------------------------------------------------
+#  copy BOXES - use this funtion if you want to add anything extra when you copy to the new BBoxes. 
+#   this mainly used for image transformations ( brightness, color jitter, contrast ...ect) and not for rotate or flip   
+# ---------------------------------------------------------
+def copy_boxes(boxes):
+    new_boxes = []
+    for cls, xc, yc, bw, bh in boxes:
+        # change here if you want the new bboxes to do something different
+        new_xc = xc
+        new_yc = yc
+        new_bw = bw
+        new_bh = bh
+        new_boxes.append([cls, new_xc, new_yc, new_bw, new_bh])
+    return new_boxes
+
+
+# ---------------------------------------------------------
+# PROCESS DATASET -  a common function for most of the actions (not for rotate)
+# ---------------------------------------------------------
+
+def process_dataset(root_dir, output_dir, func_img ,func_label=copy_boxes, debug=True, verbose=True, factor=0 ):
+    img_dir = os.path.join(root_dir, "images")
+    lbl_dir = os.path.join(root_dir, "labels")
+
+    out_img_dir = os.path.join(output_dir, "images")
+    out_lbl_dir = os.path.join(output_dir, "labels")
+    
+    if debug:
+        debug_img_dir = os.path.join(output_dir + "_debug", "images")
+        debug_lbl_dir = os.path.join(output_dir + "_debug", "labels")
+
+    os.makedirs(out_img_dir, exist_ok=True)
+    os.makedirs(out_lbl_dir, exist_ok=True)
+    os.makedirs(debug_img_dir, exist_ok=True)
+    os.makedirs(debug_lbl_dir, exist_ok=True)
+
+    for fname in os.listdir(img_dir):
+        if not fname.lower().endswith((".jpg", ".png", ".jpeg")):
+            continue
+
+        img_path = os.path.join(img_dir, fname)
+        txt_path = os.path.join(lbl_dir, os.path.splitext(fname)[0] + ".txt")
+
+        if not os.path.exists(txt_path):
+            print(f"Skipping {fname}: no label file")
+            continue
+
+        # Load image
+        img = cv2.imread(img_path)
+
+        # Load YOLO labels
+        boxes = []
+        with open(txt_path, "r") as f:
+            for line in f:
+                parts = line.strip().split()
+                cls = int(parts[0])
+                xc, yc, bw, bh = map(float, parts[1:])
+                boxes.append([cls, xc, yc, bw, bh])
+
+        # process image + boxes
+        processed_img = func_img(img,factor)
+        processed_boxes = func_label(boxes)
+           
+        # Save processed image
+        if isinstance(factor, list):
+                factorstr = "_".join(map(str, factor))
+                addtofname = '_' + func_img.__name__ + f'{factorstr}'
+        else:
+                addtofname = '_' + func_img.__name__ + f'{factor}'
+        
+        # now create a new fname 
+        new_fname = os.path.splitext(fname)[0] + addtofname + os.path.splitext(fname)[1]
+        out_img_path = os.path.join(out_img_dir, new_fname )
+        cv2.imwrite(out_img_path, processed_img)
+
+        # Save processed labels
+        out_txt_path = os.path.join(out_lbl_dir, os.path.splitext(new_fname)[0] + ".txt")
+        with open(out_txt_path, "w") as f:
+            for cls, xc, yc, bw, bh in processed_boxes:
+                f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
+
+        if debug: 
+            # Debug image with drawn boxes
+            debug_img = draw_boxes(processed_img, processed_boxes)
+            cv2.imwrite(os.path.join(debug_img_dir, new_fname), debug_img)
+
+            # Copy labels to debug folder
+            with open(os.path.join(debug_lbl_dir, os.path.splitext(new_fname)[0] + ".txt"), "w") as f:
+                for cls, xc, yc, bw, bh in processed_boxes:
+                    f.write(f"{cls} {xc:.6f} {yc:.6f} {bw:.6f} {bh:.6f}\n")
+
+        if verbose:
+            print(f"Processed {fname}")

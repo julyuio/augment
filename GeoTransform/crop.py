@@ -8,7 +8,7 @@ from .core import draw_boxes, copy_boxes
 # ---------------------------------------------------------
 # CROP A SINGLE OBJECT FROM AN IMAGE
 # ---------------------------------------------------------
-def crop_object(img, box, padding=0.05):
+def crop_object(img, box, factor=0.05):
     """
     img: original image
     box: [cls, xc, yc, bw, bh] in YOLO normalized format
@@ -115,7 +115,7 @@ def process_dataset_crop(root_dir, output_dir, debug=False, verbose=True, factor
 
         # Create a crop for each object
         for idx, box in enumerate(boxes):
-            crop_img, crop_box = crop_object(img, box, padding=padding)
+            crop_img, crop_box = crop_object(img, box, factor)
 
             crop_name = f"{os.path.splitext(fname)[0]}_crop_{idx}.jpg"
             label_name = f"{os.path.splitext(fname)[0]}_crop_{idx}.txt"
@@ -156,16 +156,5 @@ def crop_main (root_dir, output_dir, debug=False, verbose=True, factor=0.05):
                     factor = factor) # 5% padding around each crop
     
     if verbose: 
-        print(f'>> desaturate completed ')
+        print(f'>> crop completed ')
 
-
-
-# # ---------------------------------------------------------
-# # RUN
-# # ---------------------------------------------------------
-# if __name__ == "__main__":
-#     process_dataset(
-#         root_dir="train",
-#         output_dir="train_crops",
-#         padding=0.05  # 5% padding around each crop
-#     )
