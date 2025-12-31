@@ -195,11 +195,11 @@ def rotateImg_main (root_dir, output_dir, debug=False, verbose=True, factor=90):
         print(f'>> rotate for : {root_dir}')
     
     # process dataset for rotate is different from the others 
-    process_dataset(root_dir,
-                    output_dir,
-                    debug,
-                    verbose,
-                    factor)
+    process_dataset(root_dir = root_dir,
+                    output_dir = output_dir,
+                    debug = debug,
+                    verbose = verbose,
+                    factor = factor)
     
     if verbose: 
         print(f'>> rotate completed ')
