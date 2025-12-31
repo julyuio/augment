@@ -22,8 +22,8 @@ convertGrayscale(datasetDir , output_dir, debug=True ,verbose=True)
 # desaturate(datasetDir , output_dir, debug=True ,verbose=True, factor=0.5) # to 1
 # rotateImg(datasetDir , output_dir, debug=True ,verbose=True, factor=30)
 # rotateImg(datasetDir , output_dir, debug=True ,verbose=True, factor=146)
-# addNoise(datasetDir , output_dir, debug=True ,verbose=True, factor=70)
-# cropBoxes(datasetDir , output_dir, verbose=True, factor=0.10)
+# addNoise(datasetDir , output_dir, debug=True ,verbose=True, factor=70) # anyting more then 2% noise is too much 
+# cropBoxes(datasetDir , output_dir, verbose=True, factor=0.10) # crop for isolating objects
 
 
 # colorJitter(datasetDir , output_dir, debug=True ,verbose=True, factor=[0.5, 0.6, 0.6]) # brightness , contrast , saturation
