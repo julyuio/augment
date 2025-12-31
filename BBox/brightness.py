@@ -20,7 +20,7 @@ def adjBrightness(img, delta=20):
 
 
 
-def adjBrightness_main (root_dir, output_dir=root_dir, debug=False, verbose=True, factor=20):
+def adjBrightness_main (root_dir, output_dir, debug=False, verbose=True, factor=20):
     if verbose: 
         print(f'>> adjusting brightness for : {root_dir}')
     

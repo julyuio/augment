@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 
-from .core import process_dataset
+from .core import process_dataset, copy_boxes
 
 # ---------------------------------------------------------
 # CONVERT IMAGE TO GRAYSCALE (3-channel output)
@@ -17,19 +17,6 @@ def convertGrayscale(img,factor=0):
     return gray_3ch
 
 
-# ---------------------------------------------------------
-#  BOXES - no change 
-# ---------------------------------------------------------
-def convertGrayscale_boxes(boxes):
-    new_boxes = []
-    for cls, xc, yc, bw, bh in boxes:
-        new_xc = xc
-        new_yc = yc
-        new_bw = bw
-        new_bh = bh
-        new_boxes.append([cls, new_xc, new_yc, new_bw, new_bh])
-    return new_boxes
-
 
 # ---------------------------------------------------------
 # Main entry from __init__ 
@@ -38,14 +25,14 @@ def convertGrayscale_main (root_dir, output_dir, debug=False, verbose=True, fact
     if verbose: 
         print(f'>> convert grayscale for : {root_dir}')
     
-    # process dataset is main function in core.py that repeats for all other actions/tasks (flipV, flipH, brightness.... ect)
-    process_dataset(root_dir,
-                    output_dir,
-                    convertGrayscale,  # func_img argument
-                    convertGrayscale_boxes, # func_label argument
-                    debug,
-                    verbose,
-                    factor)
+    # process dataset is main function in core.py that repeats for all other actions/tasks (flipV, flipH, brightness.... ect) except rotate
+    process_dataset(root_dir = root_dir ,
+                    output_dir = output_dir ,
+                    func_img = convertGrayscale,  # func_img argument
+                    func_label = copy_boxes, # func_label argument
+                    debug = debug , 
+                    verbose = verbose,
+                    factor = factor)
     
     if verbose: 
         print(f'>> adjContrast completed ')

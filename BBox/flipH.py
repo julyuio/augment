@@ -35,7 +35,12 @@ def flipH_main (root_dir,output_dir, debug=False, verbose=True):
         print(f'>> flipping along horizontal : {root_dir}')
     
     # process dataset is main function in core.py that repeats for all other actions/tasks (flipV, flipH, brightness.... ect)
-    process_dataset(root_dir, output_dir, flipH, flip_yolo_boxes_horizontal, debug, verbose)
+    process_dataset(root_dir = root_dir,
+                     output_dir = output_dir,
+                     func_img  =flipH, 
+                     func_label = flip_yolo_boxes_horizontal, 
+                     debug = debug, 
+                     verbose = verbose)
     
     if verbose: 
         print(f'>> flipH completed ')
