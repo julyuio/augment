@@ -7,12 +7,13 @@ from .core import process_dataset, copy_boxes
 # ---------------------------------------------------------
 # ADJUST BRIGHTNESS
 # ---------------------------------------------------------
-def adjBrightness(img, delta=20):
+def adjBrightness(img, factor):
     """
     Adjust brightness by adding a constant value.
     delta > 0 → brighter
     delta < 0 → darker
     """
+    delta = factor
     img = img.astype(np.int16)
     img = img + delta
     img = np.clip(img, 0, 255).astype(np.uint8)

@@ -7,19 +7,17 @@ from .core import process_dataset, copy_boxes
 # ---------------------------------------------------------
 #  reduce saturation by a factor.
 # ---------------------------------------------------------
-def desaturate(img, factor=0.5):
+def desaturate(img, factor ):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(np.float32)
     hsv[...,1] *= (1 - factor)
     hsv = np.clip(hsv, 0, 255).astype(np.uint8)
     return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
 
-
-
 # ---------------------------------------------------------
 # Main entry from __init__ 
 # ---------------------------------------------------------
-def desaturate_main (root_dir, output_dir, debug=False, verbose=True, factor=1.5):
+def desaturate_main (root_dir, output_dir, debug=False, verbose=True, factor=0.5):
     if verbose: 
         print(f'>> desaturate for : {root_dir}')
     
