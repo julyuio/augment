@@ -1,4 +1,4 @@
-# augment YOLO  
+# Augment for YOLO  
 **Simple, readable, and powerful image + bounding‑box augmentation tools**
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
