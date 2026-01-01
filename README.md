@@ -9,7 +9,11 @@
 A lightweight collection of augmentation utilities designed to help you generate more training data for YOLO models.  
 The code is intentionally **simple**, **flat**, and **easy to modify** — no classes, no unnecessary abstractions.
 
-Tested primarily with **YOLOv5 → YOLOv11**, but compatible with any detector using bounding boxes.
+Tested primarily with **YOLOv5 → YOLOv11**, but compatible with any detector using bounding boxes. in the future i will also add polygons for segmentation models. 
+
+Take a look at main.py 
+
+examples.py contains an explanations for all of the function in this library 
 
 ---
 
