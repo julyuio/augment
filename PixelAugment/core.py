@@ -98,7 +98,11 @@ def process_dataset(root_dir, output_dir, func_img ,func_label=copy_boxes, debug
             for line in f:
                 parts = line.strip().split()
                 cls = int(parts[0])
-                xc, yc, bw, bh = map(float, parts[1:])
+                try:
+                    xc, yc, bw, bh = map(float, parts[1:])
+                except ValueError:
+                    print(f'ERROR {ValueError}: Are you trying to load polygons as bounding boxes ?')
+                    return
                 boxes.append([cls, xc, yc, bw, bh])
 
         # process image + boxes
