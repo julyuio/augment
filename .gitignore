@@ -1,4 +1,6 @@
 train*/
+old*/
+
 __pycache__/
 *.png
 *.jpeg
