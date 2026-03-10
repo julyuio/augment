@@ -24,6 +24,6 @@ def checkBB (root_dir, output_dir='_', debug=False, verbose=True):
                     factor = 0)
     
     if verbose: 
-        print(f'>> adjBrightness completed ')
+        print(f'>> Checking BB completed ')
 
 
